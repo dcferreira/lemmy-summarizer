@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  summarizer:
+    image: lemmy-summarizer:local
+    environment:
+      - LEMMY_URL=${LEMMY_URL}
+      - LEMMY_USERNAME=${USERNAME}
+      - LEMMY_PASSWORD=${PASSWORD}
+      - LEMMY_COMMUNITY=${COMMUNITY}

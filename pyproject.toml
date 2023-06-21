@@ -46,6 +46,8 @@ dependencies = [
     "pytest",
     "pre-commit",
     "mypy>=1.0.0",
+    "polyfactory~=2.3",
+    "pydantic",
 ]
 [tool.hatch.envs.default.scripts]
 typing = "mypy --install-types --non-interactive {args:lemmy_summarizer tests}"
@@ -59,6 +61,7 @@ cov = [
     "test-cov",
     "cov-report",
 ]
+build = "docker buildx build . -t lemmy-summarizer:local"
 
 [[tool.hatch.envs.all.matrix]]
 python = ["3.7", "3.8", "3.9", "3.10", "3.11"]

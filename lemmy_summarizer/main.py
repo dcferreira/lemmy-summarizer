@@ -3,6 +3,7 @@
 This is a simple bot that monitors posts in a specific community and tries
 to summarize them.
 """
+import os
 from typing import Optional
 
 import trafilatura
@@ -18,16 +19,13 @@ def main():
     summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
     lemmy = Lemmy(
-        # lemmy_url="http://127.0.0.1:8536",
-        # username="lemmy",
-        # password="lemmylemmy",
-        lemmy_url="https://beehaw.org",
-        username=None,
-        password=None,
+        lemmy_url=os.environ["LEMMY_URL"],
+        username=os.environ["LEMMY_USERNAME"],
+        password=os.environ["LEMMY_PASSWORD"],
         user_agent="summarizer (by github.com/dcferreira)",
     )
 
-    community = lemmy.get_community("News")
+    community = lemmy.get_community(os.environ["LEMMY_COMMUNITY"])
     for post in community.stream.get_posts(sort=SortType.New):
         process_post(post, summarizer)
 
@@ -88,8 +86,8 @@ This is a summary of the posted article (I'm a bot).
 
 [How do I work?](https://github.com/dcferreira/lemmy-summarizer)"""
 
-    print(comment_text)  # noqa: T201
-    # post.create_comment(comment_text)
+    comment = post.create_comment(comment_text)
+    logger.debug(f"Posted {comment.comment_view.comment.ap_id}")
 
 
 if __name__ == "__main__":
